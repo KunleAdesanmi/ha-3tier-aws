@@ -3,6 +3,7 @@
 This repository contains Terraform modules and configurations to provision a highly available (HA) 3-tier architecture on AWS.
 
 ## Overview
+## Testing workflow
 
 The repository is organized into two main components:
 
