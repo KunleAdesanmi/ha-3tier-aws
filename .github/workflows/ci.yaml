@@ -20,6 +20,8 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: 1.5.0
+      - name: Terraform Init
+        run: terraform init
       - name: Terraform Format Check
         run: terraform fmt 
       - name: Terraform Validate
