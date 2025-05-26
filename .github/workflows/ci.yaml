@@ -41,10 +41,10 @@ jobs:
         with:
           terraform_version: 1.5.0
       - name: Terraform Init
-        working-directory: ../
+        working-directory: ../..
         run: terraform init
       - name: Terraform Plan
-        working-directory: ../
+        working-directory: ../..
         run: terraform plan -out=tfplan
       - name: Upload Terraform Plan Artifact
         uses: actions/upload-artifact@v2
@@ -64,7 +64,7 @@ jobs:
         with:
           terraform_version: 1.5.0
       - name: Terraform Init
-        working-directory: ../
+        working-directory: ../..
         run: terraform init
       - name: Download Terraform Plan Artifact
         uses: actions/download-artifact@v2
@@ -72,7 +72,7 @@ jobs:
           name: tfplan
           path: ../
       - name: Terraform Apply
-        working-directory: ../
+        working-directory: ../..
         run: terraform apply -auto-approve tfplan
   
 
