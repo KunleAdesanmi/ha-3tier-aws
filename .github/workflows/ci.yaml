@@ -21,13 +21,13 @@ jobs:
         with:
           terraform_version: 1.5.0
       - name: Terraform Init
-        working-directory: ${{ github.workspace }}/3-tierHA
+        working-directory: ${{ github.workspace }}
         run: terraform init
       - name: Terraform Format Check
-        working-directory: ${{ github.workspace }}/3-tierHA
+        working-directory: ${{ github.workspace }}
         run: terraform fmt -check -recursive
       - name: Terraform Validate
-        working-directory: ${{ github.workspace }}/3-tierHA
+        working-directory: ${{ github.workspace }}
         run: terraform validate
 
   plan:
@@ -41,17 +41,17 @@ jobs:
         with:
           terraform_version: 1.5.0
       - name: Terraform Init
-        working-directory: ${{ github.workspace }}/3-tierHA
+        working-directory: ${{ github.workspace }}
         run: terraform init
       - name: Terraform Plan
-        working-directory: ${{ github.workspace }}/3-tierHA
+        working-directory: ${{ github.workspace }}
         run: terraform plan -out=tfplan
       - name: Upload Terraform Plan Artifact
         uses: actions/upload-artifact@v2
         with:
           name: tfplan
           # Upload the plan file from the 3-tierHA directory
-          path: ${{ github.workspace }}/3-tierHA/tfplan
+          path: ${{ github.workspace }}/tfplan
 
   apply:
     runs-on: ubuntu-latest
@@ -65,7 +65,7 @@ jobs:
         with:
           terraform_version: 1.5.0
       - name: Terraform Init
-        working-directory: ${{ github.workspace }}/3-tierHA
+        working-directory: ${{ github.workspace }}
         run: terraform init
       - name: Download Terraform Plan Artifact
         uses: actions/download-artifact@v2
@@ -73,7 +73,7 @@ jobs:
           name: tfplan
           path: ${{ github.workspace }}/3-tierHA
       - name: Terraform Apply
-        working-directory: ${{ github.workspace }}/3-tierHA
+        working-directory: ${{ github.workspace }}
         run: terraform apply -auto-approve tfplan
   
 
