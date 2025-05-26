@@ -59,13 +59,13 @@ jobs:
       - name: Terraform Init
         working-directory: ../
         run: terraform init
-        
+
       - name: Terraform Plan
         working-directory: ../
         run: terraform plan -out=tfplan
 
       - name: Upload Terraform Plan Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: tfplan
           path: ../tfplan
