@@ -18,7 +18,7 @@ variable "private_data_subnet_az2_cidr" {}
 # These variables are used to configure the web tier of the 3-tier architecture.
 variable "web_ami_id" {
   description = "AMI ID for the web tier instances"
-  default     = "ami-084568db4383264d4"  # Example AMI ID for the web tier
+  default     = "ami-084568db4383264d4" # Example AMI ID for the web tier
 }
 
 variable "web_instance_type" {
@@ -45,7 +45,7 @@ variable "web_asg_desired_capacity" {
 # These variables are used to configure the application tier of the 3-tier architecture.
 variable "app_ami_id" {
   description = "AMI ID for the application tier instances"
-  default     = "ami-084568db4383264d4"  # Example AMI ID for the application tier
+  default     = "ami-084568db4383264d4" # Example AMI ID for the application tier
 }
 
 variable "app_instance_type" {
@@ -94,7 +94,7 @@ variable "ecs_task_memory" {
 
 variable "app_container_image" {
   description = "Container image to use for the ECS task"
-  default     = "nginx:latest"  // Using a public image for testing
+  default     = "nginx:latest" // Using a public image for testing
 }
 
 variable "ecs_container_cpu" {
@@ -114,7 +114,7 @@ variable "ecs_execution_role" {
 
 variable "ecs_service_security_group_id" {
   description = "Security group ID for the ECS service"
-  default     = ""  // Update with your security group or use an existing module output
+  default     = "" // Update with your security group or use an existing module output
 }
 
 
@@ -123,14 +123,14 @@ variable "ecs_service_security_group_id" {
 variable "db_username" {
   description = "Username for the Aurora DB cluster"
   type        = string
-  default     = "admin"  # Default username, should be changed in production
+  default     = "admin" # Default username, should be changed in production
 }
 
 variable "db_password" {
   description = "Password for the Aurora DB cluster"
   type        = string
   sensitive   = true
-  default     = "ChangeMe123!"  # Default password, should be changed in production
+  default     = "ChangeMe123!" # Default password, should be changed in production
 }
 
 variable "db_name" {
@@ -151,5 +151,5 @@ variable "db_reader_count" {
 
 variable "db_security_group_id" {
   description = "Security group ID for the Aurora DB cluster"
-  default     = ""  // Update with your security group or use an existing module output
+  default     = "" // Update with your security group or use an existing module output
 }
