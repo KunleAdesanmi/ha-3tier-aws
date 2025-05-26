@@ -40,9 +40,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-        with:
-          submodules:  true
-          fetch-depth: 0
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
@@ -57,7 +54,7 @@ jobs:
           aws-region: us-east-1
 
       - name: Terraform Plan
-        working-directory: .
+        working-directory: root
         run: | 
               terraform init
               terraform plan -out=tfplan
