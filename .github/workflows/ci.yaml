@@ -40,6 +40,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
