@@ -21,13 +21,13 @@ jobs:
         with:
           terraform_version: 1.5.0
       - name: Terraform Init
-        working-directory: .
+        working-directory: ../3-tierHA
         run: terraform init
       - name: Terraform Format Check
-        working-directory: .
+        working-directory: ../3-tierHA
         run: terraform fmt 
       - name: Terraform Validate
-        working-directory: .
+        working-directory: ../3-tierHA
         run: terraform validate
 
   plan:
