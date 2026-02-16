@@ -10,7 +10,7 @@ provider "aws" {
 
 # create a VPC
 module "vpc" {
-  source                       = "../modules/vpc"
+  source                       = "./modules/vpc"
   region                       = var.region
   project_name                 = var.project_name
   vpc_cidr                     = var.vpc_cidr
@@ -24,7 +24,7 @@ module "vpc" {
 
 # create security groups
 module "security_groups" {
-  source       = "../modules/security_groups"
+  source       = "./modules/security_groups"
   project_name = var.project_name
   vpc_id       = module.vpc.vpc_id
 }
