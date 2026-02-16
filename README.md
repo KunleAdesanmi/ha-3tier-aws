@@ -1,83 +1,90 @@
-# Terraform Modules for AWS 3-Tier HA Architecture
+# AWS 3-Tier High Availability Architecture
 
-This repository contains Terraform modules and configurations to provision a highly available (HA) 3-tier architecture on AWS.
+Terraform configuration for deploying a production-ready, highly available 3-tier architecture on AWS spanning multiple Availability Zones.
 
-## Overview
-## Testing workflow
+## Architecture
 
-The repository is organized into two main components:
+This project provisions the following infrastructure:
 
-1. **VPC Module** (`modules/vpc`):
-   - Creates a Virtual Private Cloud (VPC) with configurable CIDR blocks.
-   - Provisions public and private subnets across two Availability Zones.
-   - Sets up an Internet Gateway and associated route tables for public subnets.
-   - Outputs key information for the created resources, such as VPC ID, subnet IDs, and Internet Gateway ID.
+### Web Tier (Public)
+- Auto Scaling Group with configurable min/max/desired capacity
+- Launch template with customizable AMI and instance type
+- Deployed across **2 public subnets** in separate AZs
 
-2. **3-Tier HA Module** (`3-tierHA`):
-   - Configures the AWS provider.
-   - Integrates the VPC module to build the network infrastructure.
-   - Uses input variables from `variable.tf` and `terraform.tfvars` to customize the infrastructure.
-   - Stores Terraform state remotely using an S3 backend (configured in `backend.tf`).
+### Application Tier (Private)
+- Auto Scaling Group for EC2-based workloads
+- ECS Fargate cluster for containerized services
+- Application Load Balancer (ALB) with health checks
+- Deployed across **2 private application subnets** in separate AZs
+
+### Data Tier (Private)
+- Aurora MySQL cluster with writer and reader instances
+- DB subnet group spanning **2 private data subnets** in separate AZs
+- Configurable reader replica count
+
+### Networking
+- Custom VPC with configurable CIDR blocks
+- 6 subnets: 2 public, 2 private app, 2 private data
+- Internet Gateway with route table associations
+- Security groups module for ALB, ECS, and database access control
 
 ## Directory Structure
 
 ```
-TerraformModules
-├── 3-tierHA
-│   ├── backend.tf              # Configures remote state storage in S3
-│   ├── main.tf                # Main configuration file that uses the VPC module
-│   ├── terraform.tfvars       # Variable definitions with CIDR blocks and project details
-│   └── variable.tf            # Variable definitions for the 3-tier HA configuration
-└── modules
-    └── vpc
-        ├── main.tf            # Provisions the VPC, subnets, internet gateway and associations
-        ├── output.tf          # Outputs of the VPC module
-        └── variable.tf        # Variable definitions for the VPC configuration
+TerraformModules/
+├── 3-tierHA/
+│   ├── main.tf              # Root configuration: providers, modules, and all resources
+│   ├── variable.tf          # Input variable definitions
+│   ├── terraform.tfvars     # Variable values (CIDR blocks, project settings)
+│   └── backend.tf           # S3 remote state backend configuration
+└── modules/
+    ├── vpc/
+    │   ├── main.tf          # VPC, subnets, internet gateway, route tables
+    │   ├── output.tf        # VPC and subnet ID outputs
+    │   └── variable.tf      # VPC module variables
+    └── security_groups/
+        └── main.tf          # Security group definitions
 ```
 
-## How to Use
+## Prerequisites
 
-1. **Configure Your Environment:**
-   - Ensure you have Terraform installed.
-   - Set up AWS credentials and configure the `default` profile if necessary.
+- Terraform installed
+- AWS CLI configured with a `default` profile
+- S3 bucket for remote state (`ha-3tier-aws-backend`)
 
-2. **Initialize Terraform:**
-   - In the `3-tierHA` directory, run:
-     ```
-     terraform init
-     ```
+## Usage
 
-3. **Plan the Deployment:**
-   - Generate an execution plan to verify the resources to be created:
-     ```
-     terraform plan
-     ```
+```bash
+cd 3-tierHA
 
-4. **Apply the Configuration:**
-   - Apply the Terraform configuration to create the resources in AWS:
-     ```
-     terraform apply
-     ```
+# Initialize Terraform and download modules/providers
+terraform init
 
-5. **Review Outputs:**
-   - After a successful apply, Terraform outputs important resource identifiers (e.g., VPC ID, subnet IDs, and Internet Gateway ID).
+# Preview changes
+terraform plan
 
-## Customization
+# Deploy the infrastructure
+terraform apply
+```
 
-- Update variable values in `terraform.tfvars` to meet your network design requirements.
-- Modify the module code in `modules/vpc` as needed for custom tagging, CIDR configurations, or additional resource provisioning.
+## Configuration
 
-## License
+Key variables can be customized in `terraform.tfvars` or passed via CLI:
 
-This repository is provided as-is under the terms of the applicable open source license.
+| Variable | Description | Default |
+|---|---|---|
+| `region` | AWS region | - |
+| `project_name` | Prefix for all resource names | - |
+| `vpc_cidr` | VPC CIDR block | - |
+| `web_instance_type` | Web tier instance type | `t3.micro` |
+| `app_instance_type` | App tier instance type | `t3.micro` |
+| `ecs_desired_count` | Number of ECS Fargate tasks | `2` |
+| `db_instance_class` | Aurora instance class | `db.r5.large` |
+| `db_reader_count` | Number of Aurora read replicas | `1` |
 
----
+## Remote State
 
-For more details on the individual resources and configurations, check the source code files directly or refer to the Terraform documentation.
-
-# Testing workflow
-
-Testing workflow
-
-last push didn't run the workflow --- 2nd attempt
-4th attempt
+Terraform state is stored in S3:
+- **Bucket:** `ha-3tier-aws-backend`
+- **Key:** `terraform/ha-3tier-aws/dev/terraform.tfstate`
+- **Region:** `us-east-1`
