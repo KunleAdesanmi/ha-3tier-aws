@@ -4,8 +4,7 @@
 
 # configure aws provider
 provider "aws" {
-  region  = var.region
-  profile = "default"
+  region = var.region
 }
 
 # create a VPC

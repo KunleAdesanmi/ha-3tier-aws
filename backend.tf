@@ -7,6 +7,5 @@ terraform {
     bucket  = "ha-3tier-aws-backend-563046585342"
     key     = "terraform/ha-3tier-aws/dev/terraform.tfstate"
     region  = "us-east-1"
-    profile = "default"
   }
 }
