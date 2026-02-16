@@ -109,7 +109,7 @@ variable "ecs_container_memory" {
 
 variable "ecs_execution_role" {
   description = "ARN of the IAM role that the ECS task uses for execution"
-  default     = "arn:aws:iam::601926771130:role/aws-service-role/ecs.amazonaws.com/AWSServiceRoleForECS" // Replace with your role ARN
+  default     = "arn:aws:iam::563046585342:role/ecsTaskExecutionRole"
 }
 
 variable "ecs_service_security_group_id" {
